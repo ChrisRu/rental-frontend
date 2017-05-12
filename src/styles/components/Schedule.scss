@@ -28,12 +28,11 @@ $border-width: 1px;
 	}
 
 	&__name {
-		padding: 1em 2em;
-		width: 8em;
+		padding: 1em 0.5em;
 		text-align: center;
 		box-sizing: border-box;
 		height: 0;
-		flex: 0 0 auto;
+		flex: 0 1 8em;
 	}
 
 	&__select {
@@ -42,7 +41,7 @@ $border-width: 1px;
 
 		&-block {
 			position: relative;
-			width: 2.5em;
+			flex: 1 0 3em;
 			padding: 1em 0;
 			text-align: center;
 			border-left: $border-width  solid lighten($font-color-light, 20%);
@@ -69,7 +68,7 @@ $border-width: 1px;
 		}
 
 		&-time {
-			width: 5em;
+			flex: 2 0 6em;
 			cursor: default;
 
 			span {

@@ -5,7 +5,7 @@
 		</div>
 		<div class="schedule__main">
 			<schedule-row-header :fromHour="fromHour" :toHour="toHour"></schedule-row-header>
-			<schedule-row v-for="(item, index) in items" :title="'Sup'" :fromHour="fromHour" :toHour="toHour" :data="item" :key="index"></schedule-row>
+			<schedule-row v-for="(item, key) in items" :title="key" :fromHour="fromHour" :toHour="toHour" :data="item" :key="key"></schedule-row>
 		</div>
 	</div>
 </template>

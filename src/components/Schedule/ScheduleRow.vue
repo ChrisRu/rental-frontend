@@ -1,9 +1,9 @@
 <template>
 	<div class="schedule__row">
-		<div class="schedule__name">{{ title }}</div>
+		<div class="schedule__name">{{ prettyDate(title) }}</div>
 		<div class="schedule__select">
 			<div v-for="activity in activities" class="schedule__select-block">
-				<div v-if="activity !== undefined" class="schedule__select-activity" :style="{ width: 5 * (parseTime(activity.toHour) - parseTime(activity.fromHour)) + 'em'}">
+				<div v-if="activity !== undefined" :style="{ width: getWidth(activity)}" class="schedule__select-activity">
 					<h1>{{ activity.title }}</h1>
 					<span class="time">{{ activity.fromHour }} - {{ activity.toHour }}</span>
 				</div>
@@ -22,7 +22,6 @@ export default {
 		activities() {
 			return this.timeRange(this.fromHour, this.toHour).map(this.getActivity);
 		},
-
 	},
 	methods: {
 		getActivity(hour) {
@@ -36,6 +35,13 @@ export default {
 		parseTime(timeString) {
 			const time = moment(timeString, "H:mm");
 			return time.hours() + time.minutes() / 60;
+		},
+		prettyDate(dateString) {
+			const date = moment(dateString, "YYYY-MM-DD");
+			return date.format("D MMMM");
+		},
+		getWidth(activity) {
+			return 5 * (this.parseTime(activity.toHour) - this.parseTime(activity.fromHour)) + 'em';
 		}
 	}
 }

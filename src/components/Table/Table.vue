@@ -110,7 +110,12 @@ export default {
 		filteredItems() {
 			const items = this.items
 				.map(item => ({ ...item, isRented: this.isRented(item.rentedAt, item.rentedTill) }))
-				.filter(item => Object.values({ ...item, rentedAt: undefined, rentedTill: undefined }).some(name => String(name).toLowerCase().includes(this.searchText.toLowerCase())))
+				.filter(item => {
+					return Object
+						.values({ ...item, rentedAt: undefined, rentedTill: undefined })
+						.some(name => String(name).toLowerCase()
+							.includes(this.searchText.toLowerCase()));
+				})
 				.sort((a, b) => this.sortArray(a[this.sortText], b[this.sortText]));
 
 			if (this.inverseSort) {
