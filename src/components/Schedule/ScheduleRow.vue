@@ -1,11 +1,11 @@
 <template>
 	<div class="schedule__row">
-		<div class="schedule__name">{{ prettyDate(title) }}</div>
+		<div class="schedule__name">{{ data.name }}</div>
 		<div class="schedule__select">
 			<div v-for="activity in activities" class="schedule__select-block">
-				<div v-if="activity !== undefined" :style="{ width: getWidth(activity)}" class="schedule__select-activity">
-					<h1>{{ activity.title }}</h1>
-					<span class="time">{{ activity.fromHour }} - {{ activity.toHour }}</span>
+				<div v-if="activity !== undefined" :style="{ left: getLeft(activity), width: getWidth(activity)}" class="schedule__select-activity">
+					<h1>{{ activity.by }}</h1>
+					<span class="time">{{ activity.from }} - {{ activity.to }}</span>
 				</div>
 			</div>
 		</div>
@@ -25,7 +25,7 @@ export default {
 	},
 	methods: {
 		getActivity(hour) {
-			return this.data.find(activity => this.parseTime(activity.fromHour) === hour);
+			return this.data.rented.find(activity => Math.floor(this.parseTime(activity.from)) === hour);
 		},
 		timeRange(from, to) {
 			return Array
@@ -36,12 +36,11 @@ export default {
 			const time = moment(timeString, "H:mm");
 			return time.hours() + time.minutes() / 60;
 		},
-		prettyDate(dateString) {
-			const date = moment(dateString, "YYYY-MM-DD");
-			return date.format("D MMMM");
-		},
 		getWidth(activity) {
-			return 5 * (this.parseTime(activity.toHour) - this.parseTime(activity.fromHour)) + 'em';
+			return 5 * (this.parseTime(activity.to) - this.parseTime(activity.from)) + 'em';
+		},
+		getLeft(activity) {
+			return moment(activity.from, "H:mm").minutes() / 60 * 6 + "em";
 		}
 	}
 }

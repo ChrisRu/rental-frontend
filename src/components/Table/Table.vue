@@ -125,11 +125,10 @@ export default {
 			return items;
 		},
 		slicedFilteredItems() {
-			return this.filteredItems.slice(1, 10);
-			//return this.filteredItems.slice((this.displayItemsPage - 1) * this.maximumDisplayItems, this.displayItemsPage * this.maximumDisplayItems);
+			return this.filteredItems.slice((this.displayItemsPage - 1) * this.maximumDisplayItems, this.displayItemsPage * this.maximumDisplayItems);
 		},
 		tableInfo() {
-			const itemCount = this.slicedFilteredItems.length;
+			const itemCount = this.filteredItems.length;
 			let firstId = (this.displayItemsPage - 1) * this.maximumDisplayItems + 1;
 			let lastId = this.displayItemsPage * this.maximumDisplayItems;
 
@@ -139,7 +138,7 @@ export default {
 			return `Showing ${firstId}-${lastId} of ${itemCount} records`;
 		},
 		pageCount() {
-			return Math.ceil(this.slicedFilteredItems.length / this.maximumDisplayItems);
+			return Math.ceil(this.filteredItems.length / this.maximumDisplayItems);
 		}
 	}
 }
