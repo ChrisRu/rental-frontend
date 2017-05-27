@@ -76,27 +76,26 @@ export default {
 					this.items = res.data.items;
 				})
 				.catch(e => {
-					this.columns = [];
-					this.items = [];
-					console.log(e);
+					console.error(e);
 				});
 		},
 		isRented(fromDateString, toDateString) {
 			const fromDate = new Date(fromDateString);
 			const currentDate = new Date();
 			const toDate = new Date(toDateString);
-			return moment(fromDate).isBefore(currentDate) && moment(currentDate).isBefore(toDate)
+			return moment(fromDate).isBetween(currentDate, toDate);
 		},
 		setSort(type) {
-			this.inverseSort = (this.sortText === type) && (!this.inverseSort);
+			this.inverseSort = this.sortText === type && !this.inverseSort;
 			this.sortText = type;
 		},
-		sortArray(x, y) {
+		compareSort(x, y) {
 			switch (typeof x) {
 				case 'string':
 					x = x.toLowerCase();
 					y = y.toLowerCase();
-					return (x < y) ? -1 : (x > y ? 1 : 0);
+					return x.localeCompare(y);
+					//return (x < y) ? -1 : (x > y ? 1 : 0);
 				case 'object':
 					return x.length - y.length;
 				case 'boolean':
@@ -108,7 +107,7 @@ export default {
 	},
 	computed: {
 		filteredItems() {
-			const items = this.items
+			const filteredItems = this.items
 				.map(item => ({ ...item, isRented: this.isRented(item.rentedAt, item.rentedTill) }))
 				.filter(item => {
 					return Object
@@ -116,13 +115,13 @@ export default {
 						.some(name => String(name).toLowerCase()
 							.includes(this.searchText.toLowerCase()));
 				})
-				.sort((a, b) => this.sortArray(a[this.sortText], b[this.sortText]));
+				.sort((a, b) => this.compareSort(a[this.sortText], b[this.sortText]));
 
 			if (this.inverseSort) {
-				items.reverse();
+				filteredItems.reverse();
 			}
 
-			return items;
+			return filteredItems;
 		},
 		slicedFilteredItems() {
 			return this.filteredItems.slice((this.displayItemsPage - 1) * this.maximumDisplayItems, this.displayItemsPage * this.maximumDisplayItems);

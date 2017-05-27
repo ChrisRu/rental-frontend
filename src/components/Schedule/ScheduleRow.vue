@@ -2,11 +2,10 @@
 	<div class="schedule__row">
 		<div class="schedule__name">{{ data.name }}</div>
 		<div class="schedule__select">
-			<div v-for="activity in activities" class="schedule__select-block">
-				<div v-if="activity !== undefined" :style="{ left: getLeft(activity), width: getWidth(activity)}" class="schedule__select-activity">
-					<h1>{{ activity.by }}</h1>
-					<span class="time">{{ activity.from }} - {{ activity.to }}</span>
-				</div>
+			<div v-for="activity in activities" class="schedule__select-block"></div>
+			<div v-for="(activity, index) in activities" v-if="activity !== undefined" :style="{ top: getTop(index), left: getLeft(activity), width: getWidth(activity)}" class="schedule__select-activity">
+				<h1>{{ activity.by }}</h1>
+				<span class="time">{{ activity.from }} - {{ activity.to }}</span>
 			</div>
 		</div>
 	</div>
@@ -40,7 +39,10 @@ export default {
 			return 5 * (this.parseTime(activity.to) - this.parseTime(activity.from)) + 'em';
 		},
 		getLeft(activity) {
-			return moment(activity.from, "H:mm").minutes() / 60 * 6 + "em";
+			return 6 * this.parseTime(activity.from, "H:mm") + "em";
+		},
+		getTop(index) {
+			return 6.125 * index + "em";
 		}
 	}
 }

@@ -1,5 +1,8 @@
 $border-width: 1px;
 
+$dark-blue: #0079ff;
+$light-blue: #01b2ff;
+
 .schedule {
 	width: 100%;
 	text-align: left;
@@ -38,6 +41,7 @@ $border-width: 1px;
 	&__select {
 		display: flex;
 		flex-flow: row nowrap;
+		position: relative;
 
 		&-block {
 			position: relative;
@@ -88,7 +92,8 @@ $border-width: 1px;
 			left: -$border-width;
 			top: -$border-width;
 			bottom: -$border-width;
-			background: #656C7E;
+			background: linear-gradient(90deg, $dark-blue, $light-blue);
+			//background: #656C7E;
 			color: white;
 			white-space: nowrap;
 			z-index: 10;
@@ -97,6 +102,7 @@ $border-width: 1px;
 			text-align: left;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			height: 3em;
 
 			h1 {
 				font-size: 0.9em;

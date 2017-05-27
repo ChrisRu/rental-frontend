@@ -39,7 +39,6 @@ export default {
 					this.items = res.data.items;
 				})
 				.catch(e => {
-					this.items = [];
 					console.error(e);
 				});
 		},
