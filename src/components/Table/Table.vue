@@ -14,10 +14,10 @@
 					<icon :type="'#carot-down'"></icon>
 				</th>
 			</tr>
-			<tr class="table__item" v-if="!filteredItems.length">
+			<tr class="table__item" v-if="!filteredBoats.length">
 				<td class="extend" :colspan="columns.length">Geen resultaten gevonden...</td>
 			</tr>
-			<tr v-for="item in slicedFilteredItems" class="table__item" :class="{ 'table__item--rented': item.isRented }">
+			<tr v-for="item in slicedfilteredBoats" class="table__item" :class="{ 'table__item--rented': item.isRented }">
 				<table-item v-for="column in columns" :item="item" :column="column" :key="item.id"></table-item>
 			</tr>
 		</table>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import gql from 'graphql-tag';
 import * as moment from 'moment';
 import TableItem from './TableItem';
 import Icon from '../Icon';
@@ -50,14 +50,11 @@ export default {
 			searchText: '',
 			sortText: 'id',
 			inverseSort: false,
-			columns: [],
-			items: [],
 			maximumDisplayItems: 10,
-			displayItemsPage: 1
+			displayItemsPage: 1,
+			boats: [],
+			columns: []
 		}
-	},
-	created() {
-		this.fetchData();
 	},
 	watch: {
 		inverseSort() {
@@ -65,20 +62,12 @@ export default {
 		},
 		searchText() {
 			this.displayItemsPage = 1;
+		},
+		pageCount() {
+			this.displayItemsPage = 1;
 		}
 	},
 	methods: {
-		fetchData() {
-			axios
-				.get('/static/mock_data.json')
-				.then(res => {
-					this.columns = res.data.columns;
-					this.items = res.data.items;
-				})
-				.catch(e => {
-					console.error(e);
-				});
-		},
 		isRented(fromDateString, toDateString) {
 			const fromDate = new Date(fromDateString);
 			const currentDate = new Date();
@@ -95,7 +84,6 @@ export default {
 					x = x.toLowerCase();
 					y = y.toLowerCase();
 					return x.localeCompare(y);
-					//return (x < y) ? -1 : (x > y ? 1 : 0);
 				case 'object':
 					return x.length - y.length;
 				case 'boolean':
@@ -106,8 +94,8 @@ export default {
 		}
 	},
 	computed: {
-		filteredItems() {
-			const filteredItems = this.items
+		filteredBoats() {
+			const filteredBoats = this.boats
 				.map(item => ({ ...item, isRented: this.isRented(item.rentedAt, item.rentedTill) }))
 				.filter(item => {
 					return Object
@@ -118,16 +106,16 @@ export default {
 				.sort((a, b) => this.compareSort(a[this.sortText], b[this.sortText]));
 
 			if (this.inverseSort) {
-				filteredItems.reverse();
+				filteredBoats.reverse();
 			}
 
-			return filteredItems;
+			return filteredBoats;
 		},
-		slicedFilteredItems() {
-			return this.filteredItems.slice((this.displayItemsPage - 1) * this.maximumDisplayItems, this.displayItemsPage * this.maximumDisplayItems);
+		slicedfilteredBoats() {
+			return this.filteredBoats.slice((this.displayItemsPage - 1) * this.maximumDisplayItems, this.displayItemsPage * this.maximumDisplayItems);
 		},
 		tableInfo() {
-			const itemCount = this.filteredItems.length;
+			const itemCount = this.filteredBoats.length;
 			let firstId = (this.displayItemsPage - 1) * this.maximumDisplayItems + 1;
 			let lastId = this.displayItemsPage * this.maximumDisplayItems;
 
@@ -137,8 +125,38 @@ export default {
 			return `Showing ${firstId}-${lastId} of ${itemCount} records`;
 		},
 		pageCount() {
-			return Math.ceil(this.filteredItems.length / this.maximumDisplayItems);
+			return Math.ceil(this.filteredBoats.length / this.maximumDisplayItems);
 		}
+	},
+	apollo: {
+		columns: gql`
+			{
+				columns {
+					type
+					name
+					extend
+				}
+			}
+		`,
+		boats: gql`
+			{
+				boats {
+					id
+					name
+					type
+					crew
+					rented {
+						date
+						to
+						from
+						by
+					}
+					repairs {
+						info
+					}
+				}
+			}
+		`
 	}
 }
 </script>

@@ -5,13 +5,13 @@
 		</div>
 		<div class="schedule__main">
 			<schedule-row-header :fromHour="fromHour" :toHour="toHour"></schedule-row-header>
-			<schedule-row v-for="(item, index) in items" :fromHour="fromHour" :toHour="toHour" :data="item" :key="index"></schedule-row>
+			<schedule-row v-for="(item, index) in boats" :fromHour="fromHour" :toHour="toHour" :data="item" :key="index"></schedule-row>
 		</div>
 	</div>
 </template>
 
 <script>
-import axios from 'axios';
+import gql from 'graphql-tag';
 import ScheduleRow from './ScheduleRow';
 import ScheduleRowHeader from './ScheduleRowHeader';
 
@@ -21,27 +21,35 @@ export default {
 		ScheduleRow,
 		ScheduleRowHeader
 	},
-	created() {
-		this.fetchData();
-	},
 	data() {
 		return {
 			fromHour: 0,
 			toHour: 24,
-			items: []
+			boats: []
 		}
 	},
-	methods: {
-		fetchData() {
-			axios
-				.get('/static/mock_data.json')
-				.then(res => {
-					this.items = res.data.items;
-				})
-				.catch(e => {
-					console.error(e);
-				});
-		},
+	apollo: {
+		boats: {
+			query: gql`
+				{
+					boats {
+						id
+						name
+						type
+						crew
+						rented {
+							date
+							to
+							from
+							by
+						}
+						repairs {
+							info
+						}
+					}
+				}
+			`
+		}
 	}
 }
 </script>
