@@ -19,18 +19,18 @@
 import * as moment from 'moment';
 
 export default {
-	name: 'table-item',
-	props: [
-		'item',
-		'column'
-	],
-	methods: {
-		getTime(dateString) {
-			if (dateString === undefined) return '';
-			return moment(dateString).format('H:mm');
-		}
-	}
-}
+  name: 'table-item',
+  props: ['item', 'column'],
+  methods: {
+    getTime(dateString) {
+      if (!dateString) {
+        return '';
+      }
+      return moment(dateString).format('H:mm');
+    }
+  }
+};
 </script>
 
-<style src="@/styles/components/TableItem.scss" lang="scss"></style>
+<style src="@/styles/TableItem.scss" lang="scss">
+</style>

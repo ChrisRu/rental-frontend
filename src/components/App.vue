@@ -20,11 +20,12 @@
 import Navigation from '@/components/Navigation';
 
 export default {
-	name: 'app',
-	components: {
-		Navigation
-	}
-}
+  name: 'app',
+  components: {
+    Navigation
+  }
+};
 </script>
 
-<style src="@/styles/components/App.scss" lang="scss"></style>
+<style src="@/styles/App.scss" lang="scss">
+</style>

@@ -2,7 +2,10 @@
 	<div class="schedule__row">
 		<div class="schedule__name">{{ title }}</div>
 		<div class="schedule__select">
-			<div v-for="hour in (toHour - fromHour)" class="schedule__select-block schedule__select-time">
+			<div
+				v-for="hour in (toHour - fromHour)"
+				:key="hour"
+				class="schedule__select-block schedule__select-time">
 				{{ hour + fromHour - 1 }}
 				<span>: 00</span>
 			</div>
@@ -12,7 +15,7 @@
 
 <script>
 export default {
-	name: 'schedule-row-header',
-	props: ['fromHour', 'toHour', 'title']
-}
+  name: 'schedule-row-header',
+  props: ['fromHour', 'toHour', 'title']
+};
 </script>

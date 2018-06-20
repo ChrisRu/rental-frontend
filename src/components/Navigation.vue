@@ -9,11 +9,12 @@
 import VueRouter from 'vue-router';
 
 export default {
-	name: 'navigation',
-	components: {
-		VueRouter
-	}
-}
+  name: 'navigation',
+  components: {
+    VueRouter
+  }
+};
 </script>
 
-<style src="@/styles/components/Navigation.scss" lang="scss" scoped></style>
+<style src="@/styles/Navigation.scss" lang="scss" scoped>
+</style>
